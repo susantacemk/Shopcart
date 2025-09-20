@@ -1,0 +1,44 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Conversation{% endblock %}
+
+{% block content %}
+<div class="flex flex-col h-[80vh] max-w-4xl mx-auto">
+  <!-- Title -->
+  <h1 class="mb-4 text-2xl sm:text-3xl font-bold text-gray-100">Conversation</h1>
+
+  <!-- Messages Container -->
+  <div class="flex-1 overflow-y-auto space-y-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-2xl shadow-inner">
+    {% for message in conversation.messages.all %}
+      <div class="flex {% if message.created_by == request.user %}justify-end{% else %}justify-start{% endif %}">
+        <div class="{% if message.created_by == request.user %}
+                      bg-blue-500 text-white rounded-2xl rounded-br-none
+                    {% else %}
+                      bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100 rounded-2xl rounded-bl-none
+                    {% endif %} max-w-xs sm:max-w-md px-4 py-3 shadow">
+          <p class="text-sm sm:text-base">{{ message.content }}</p>
+          <p class="mt-1 text-[10px] sm:text-xs opacity-70 text-right">
+            {{ message.created_by.username }} · {{ message.created_at|date:"M d, H:i" }}
+          </p>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-center text-gray-400">No messages yet.</p>
+    {% endfor %}
+  </div>
+
+  <!-- Message Form -->
+  <form method="post" action="." class="mt-4 flex items-center gap-2">
+    {% csrf_token %}
+    {{ form.content.errors }}
+    <textarea name="content"
+              rows="1"
+              placeholder="Type a message..."
+              class="flex-1 resize-none px-4 py-3 rounded-2xl border border-gray-300 dark:border-gray-600 
+                     bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500"></textarea>
+    <button class="px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white font-medium rounded-2xl shadow">
+      Send
+    </button>
+  </form>
+</div>
+{% endblock %}

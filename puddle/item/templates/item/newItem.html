@@ -1,0 +1,39 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{title}}{% endblock title %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto p-6 bg-gray-300 rounded-xl shadow-md ">
+    <h1 class="mb-6 text-center font-extrabold text-2xl md:text-3xl text-gray-800">{{title}}</h1>
+
+    <form action="." method="post" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- Django form fields -->
+        <div class="space-y-4 text-black">
+            {{ form.as_p }}
+        </div>
+
+        <!-- Errors -->
+        {% if form.errors or form.non_field_errors %}
+            <div class="p-4 bg-red-100 text-red-700 rounded-lg text-sm">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <!-- Submit Button -->
+        <div class="flex justify-center">
+            <button type="submit"
+                class="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-700 hover:from-teal-600 hover:to-teal-800 
+                       text-white font-semibold rounded-xl shadow-lg transition-all duration-300 ease-in-out">
+                Submit
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

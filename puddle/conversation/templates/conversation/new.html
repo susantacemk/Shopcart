@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+
+{% block title %}New Conversation{% endblock %}
+
+{% block content %}
+<div class="flex justify-center px-4 sm:px-6 lg:px-8">
+  <div class="w-full max-w-2xl bg-gray-300 rounded-2xl shadow-lg p-6 sm:p-10">
+    
+    <!-- Title -->
+    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 text-center mb-6">
+      Start a New Conversation
+    </h1>
+
+    <!-- Form -->
+    <form method="post" action="." class="space-y-5">
+      {% csrf_token %}
+
+      <!-- Render form fields -->
+      <div class="space-y-4 text-gray-800">
+        {{ form.as_p }}
+      </div>
+
+      <!-- Error Messages -->
+      {% if form.errors or form.non_field_errors %}
+      <div class="p-4 sm:p-5 bg-red-100 border border-red-300 rounded-lg text-red-700">
+        <ul class="list-disc pl-5 space-y-1">
+          {% for field in form %}
+            {% for error in field.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          {% endfor %}
+          {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+      <!-- Submit Button -->
+      <div class="flex justify-center">
+        <button 
+          type="submit"
+          class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-teal-500 to-green-500 text-white font-medium rounded-xl shadow-md hover:from-teal-600 hover:to-green-600 transition">
+          Send Message
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
